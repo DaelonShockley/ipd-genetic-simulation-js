@@ -1,4 +1,4 @@
-class Player{
+export default class Player{
     constructor(table_init_magnitude, rounds_per_game){
         this.opp_history_weight = this.generateRandomArray(rounds_per_game, -table_init_magnitude / 2, table_init_magnitude);
         this.self_history_weight = this.generateRandomArray(rounds_per_game, -table_init_magnitude / 2, table_init_magnitude);
@@ -24,7 +24,7 @@ class Player{
         if(self_history === ""){
             probabilities.push(this.opp_history_weight[0][0]);
             probabilities.push(this.self_history_weight[0][0]);
-            odds = mean(probabilities)
+            let odds = this.mean(probabilities)
             if(Math.random() <= odds){
                 this.num_cooperations++
                 return false //cooperate
@@ -37,11 +37,11 @@ class Player{
 
         for (let i = 0; i <= opp_history.length; i++)
         {
-            probabilities.push(this.opp_history_weight[i-1][Number(opp_history[-i])]);
-            probabilities.push(this.self_history_weight[i-1][Number(self_history[-i])]);
+            probabilities.push(this.opp_history_weight[i][Number(opp_history[array.length - (i+1)])]);
+            probabilities.push(this.self_history_weight[i][Number(self_history[array.length - (i+1)])]);
         }
 
-        const odds = sigmoid(mean(probabilities));
+        let odds = this.sigmoid(this.mean(probabilities));
 
         if(Math.random() <= odds){
             this.num_cooperations++
