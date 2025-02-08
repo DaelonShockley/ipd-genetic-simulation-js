@@ -35,11 +35,12 @@ export default class Player{
             }
         }
 
-        for (let i = 0; i <= opp_history.length; i++)
+        for (let i = 1; i <= opp_history.length; i++) 
         {
-            probabilities.push(this.opp_history_weight[i][Number(opp_history[opp_history.length - (i+1)])]);
-            probabilities.push(this.self_history_weight[i][Number(self_history[self_history.length - (i+1)])]);
+            probabilities.push(this.opp_history_weight[i - 1][Number(opp_history[opp_history.length - i])]);
+            probabilities.push(this.self_history_weight[i - 1][Number(self_history[self_history.length - i])]);
         }
+
 
         let odds = this.sigmoid(this.mean(probabilities));
 
