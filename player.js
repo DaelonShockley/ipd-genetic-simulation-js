@@ -1,15 +1,15 @@
-export default class Player{
-    constructor(table_init_magnitude, rounds_per_game){
-        this.opp_history_weight = this.generateRandomArray(rounds_per_game, -table_init_magnitude / 2, table_init_magnitude);
-        this.self_history_weight = this.generateRandomArray(rounds_per_game, -table_init_magnitude / 2, table_init_magnitude);
+export default class Player {
+    constructor(tableInitMagnitude, roundsPerGame) {
+        this.oppHistoryWeight = this.generateRandomArray(roundsPerGame, -tableInitMagnitude / 2, tableInitMagnitude);
+        this.selfHistoryWeight = this.generateRandomArray(roundsPerGame, -tableInitMagnitude / 2, tableInitMagnitude);
 
-        this.total_score = 0;
+        this.totalScore = 0;
         this.wins = 0;
         this.losses = 0;
         this.draws = 0;
 
-        this.num_defections = 0;
-        this.num_cooperations = 0;
+        this.numDefections = 0;
+        this.numCooperations = 0;
     }
 
     generateRandomArray(rows, min, max) {
@@ -18,51 +18,46 @@ export default class Player{
         );
     }
 
-    getDecision(self_history, opp_history){
+    getDecision(selfHistory, oppHistory) {
         let probabilities = [];
 
-        if(self_history === ""){
-            probabilities.push(this.opp_history_weight[0][0]);
-            probabilities.push(this.self_history_weight[0][0]);
-            let odds = this.mean(probabilities)
-            if(Math.random() <= odds){
-                this.num_cooperations++
-                return false //cooperate
-            }
-            else{
-                this.num_defections++
-                return true //defect
+        if (selfHistory === "") {
+            probabilities.push(this.oppHistoryWeight[0][0]);
+            probabilities.push(this.selfHistoryWeight[0][0]);
+            let odds = this.mean(probabilities);
+            if (Math.random() <= odds) {
+                this.numCooperations++;
+                return false; // cooperate
+            } else {
+                this.numDefections++;
+                return true; // defect
             }
         }
 
-        for (let i = 1; i <= opp_history.length; i++) 
-        {
-            probabilities.push(this.opp_history_weight[i - 1][Number(opp_history[opp_history.length - i])]);
-            probabilities.push(this.self_history_weight[i - 1][Number(self_history[self_history.length - i])]);
+        for (let i = 1; i <= oppHistory.length; i++) {
+            probabilities.push(this.oppHistoryWeight[i - 1][Number(oppHistory[oppHistory.length - i])]);
+            probabilities.push(this.selfHistoryWeight[i - 1][Number(selfHistory[selfHistory.length - i])]);
         }
-
 
         let odds = this.sigmoid(this.mean(probabilities));
 
-        if(Math.random() <= odds){
-            this.num_cooperations++
-            return false //cooperate
-        }
-        else{
-            this.num_defections++
-            return true //defect
+        if (Math.random() <= odds) {
+            this.numCooperations++;
+            return false; // cooperate
+        } else {
+            this.numDefections++;
+            return true; // defect
         }
     }
 
-    log(){
+    log() {
         return [
-            this.total_score,
+            this.totalScore,
             this.wins,
             this.losses,
             this.draws,
-            this.num_defections / (this.num_defections + this.num_cooperations)
+            this.numDefections / (this.numDefections + this.numCooperations)
         ];
-        
     }
 
     mean(arr) {
@@ -72,5 +67,21 @@ export default class Player{
 
     sigmoid(x) {
         return 1 / (1 + Math.exp(-x));
+    }
+
+    clone() {
+        let newPlayer = new Player(1, 1);
+        newPlayer.oppHistoryWeight = this.oppHistoryWeight;
+        newPlayer.selfHistoryWeight = this.selfHistoryWeight;
+
+        newPlayer.totalScore = 0;
+        newPlayer.wins = 0;
+        newPlayer.losses = 0;
+        newPlayer.draws = 0;
+
+        newPlayer.numDefections = 0;
+        newPlayer.numCooperations = 0;
+
+        return newPlayer;
     }
 }

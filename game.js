@@ -1,5 +1,5 @@
 export default class Game{
-    static runRound(players, rounds_per_game, games_per_match, score_both_coop, score_both_def, score_player_def, score_opp_def){
+    static runRound(players, roundsPerGame, gamesPerMatch, scoreBothCoop, scoreBothDef, scorePlayerDef, scoreOppDef){
         for (let i = 0; i < players.length; i++) {
             for (let j = i + 1; j < players.length; j++) {  // Iterate through all unique pairs
                 for (let k = 0; k < gamesPerMatch; k++) {
@@ -50,15 +50,12 @@ export default class Game{
         player2.totalScore += player2Score;
     
         if (player1Score > player2Score) {
-            console.log("\nPlayer 1 wins!\n")
             player1.wins += 1;
             player2.losses += 1;
         } else if (player1Score === player2Score) {
-            console.log("\nIt's a draw\n")
             player1.draws += 1;
             player2.draws += 1;
         } else {
-            console.log("\nPlayer 2 wins!\n")
             player2.wins += 1;
             player1.losses += 1;
         }
