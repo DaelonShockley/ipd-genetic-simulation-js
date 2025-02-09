@@ -8,7 +8,7 @@ const startTime = performance.now();
 
 const tableInitMagnitude = 1;
 const roundsPerGame = 20;
-const gamesPerMatch = 10;
+const gamesPerMatch = 2;
 
 const scoreBothCoop = 4;
 const scoreBothDef = 1;
